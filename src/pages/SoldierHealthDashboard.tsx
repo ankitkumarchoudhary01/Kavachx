@@ -110,7 +110,7 @@ const mockSoldiers: Soldier[] = [
       { id: '15', name: 'Body Armor', type: 'gear', status: 'ready', location: 'Torso', lastChecked: new Date() },
       { id: '16', name: 'GPS Device', type: 'communication', status: 'ready', location: 'Backpack', lastChecked: new Date() },
     ],
-    location: { latitude: 51.5074, longitude: -0.1278, altitude: 12 },
+    location: { latitude: 2.5074, longitude: -51.1278, altitude: 12 },
     missionTime: 180,
     fatigueLevel: 28,
     hydrationLevel: 88,
@@ -175,7 +175,7 @@ export const SoldierHealthDashboard: React.FC = () => {
         <Sidebar />
         <main className="flex-1 overflow-auto">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8">
-            {/* Page Title */}
+            {/* Page Title
             <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -183,7 +183,7 @@ export const SoldierHealthDashboard: React.FC = () => {
               style={{ color: THEME.colors.accent }}
             >
               Soldier Health Monitoring System
-            </motion.h1>
+            </motion.h1> */}
 
             {/* Metrics Overview */}
             <HealthMetricsOverview metrics={useSoldierStore((state) => state.metrics)} />
@@ -195,7 +195,7 @@ export const SoldierHealthDashboard: React.FC = () => {
                 <h2 className="text-xl font-bold mb-4" style={{ color: THEME.colors.accent }}>
                   Squad Members ({soldiers.length})
                 </h2>
-                <div className="space-y-2 max-h-[700px] overflow-y-auto pr-2">
+                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-2">
                   {soldiers.map((soldier, idx) => (
                     <SoldierCard
                       key={soldier.id}
@@ -207,30 +207,20 @@ export const SoldierHealthDashboard: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Location Map */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="lg:col-span-2"
-              >
-                <h2 className="text-xl font-bold mb-4" style={{ color: THEME.colors.accent }}>
-                  Field Positions
-                </h2>
-                <SoldierLocationMap soldiers={soldiers} />
-              </motion.div>
+              {/* Vital Signs */}
+                  <div className="lg:col-span-2">
+                  <VitalSignsCard 
+                    vitalSigns={displaySoldier.vitalSigns}
+                    soldierName={displaySoldier.name}
+                  />
+                  </div>
+                  
             </div>
 
             {/* Selected Soldier Details */}
             {displaySoldier && (
               <>
-                {/* Vital Signs */}
-                <div className="mb-8">
-                  <VitalSignsCard
-                    vitalSigns={displaySoldier.vitalSigns}
-                    soldierName={displaySoldier.name}
-                  />
-                </div>
+                
 
                 {/* Equipment & Mission Details */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -269,6 +259,7 @@ export const SoldierHealthDashboard: React.FC = () => {
                             overflow: 'hidden',
                           }}
                         >
+
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${(displaySoldier.missionTime / 480) * 100}%` }}
@@ -387,6 +378,21 @@ export const SoldierHealthDashboard: React.FC = () => {
                       </motion.div>
                     </div>
                   </motion.div>
+                  
+                </div>
+                {/* Location Map */}
+                <div className="mb-8">
+                  <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="lg:col-span-2"
+              >
+                <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: THEME.colors.accent }}>
+                  Field Positions
+                </h2>
+                <SoldierLocationMap soldiers={soldiers} />
+              </motion.div>
                 </div>
               </>
             )}

@@ -28,7 +28,7 @@ export const SoldierCard: React.FC<SoldierCardProps> = ({ soldier, index, onSele
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
-      whileHover={{ x: 5, scale: 1.02 }}
+      whileHover={{ x: 4, scale: 1.01 }}
       onClick={() => onSelect(soldier)}
       className="p-4 rounded-lg border mb-3 cursor-pointer"
       style={{

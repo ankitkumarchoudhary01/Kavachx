@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
             <AlertCircle size={32} color={THEME.colors.accent} />
           </motion.div>
           <h1 className="text-2xl font-bold" style={{ color: THEME.colors.accent }}>
-            Security Intelligence Dashboard
+            KAVACH X - Soldier Health Monitoring System
           </h1>
         </div>
 
