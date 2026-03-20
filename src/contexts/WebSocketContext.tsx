@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Threat, Incident, DashboardMetrics } from '../types';
 
 interface WebSocketContextType {
   connected: boolean;

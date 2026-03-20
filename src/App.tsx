@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { WebSocketProvider } from './contexts/WebSocketContext';
 import { Dashboard } from './pages/Dashboard';
 import { SoldierHealthDashboard } from './pages/SoldierHealthDashboard';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'security' | 'soldier'>('soldier');
+  const [currentPage] = useState<'security' | 'soldier'>('soldier');
 
   return (
     <WebSocketProvider>

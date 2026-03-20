@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { THEME } from '../../config/theme';
 import { Threat } from '../../types';
@@ -42,7 +42,7 @@ export const RealTimeThreatMap: React.FC<RealTimeThreatMapProps> = ({ threats })
         <rect width="1000" height="600" fill="url(#grid)" />
 
         {/* Plot threats as circles */}
-        {animatingThreats.map((threat, idx) => {
+        {animatingThreats.map((threat) => {
           const x = ((threat.longitude + 180) / 360) * 1000;
           const y = ((90 - threat.latitude) / 180) * 600;
           const radius = threat.severity === 'critical' ? 20 : threat.severity === 'high' ? 15 : 10;
