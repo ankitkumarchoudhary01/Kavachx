@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { THEME } from '../config/theme';
 import { Header } from '../components/layout/Header';
@@ -9,7 +10,7 @@ import { VitalSignsCard } from '../components/soldier/VitalSignsCard';
 import { EquipmentStatus } from '../components/soldier/EquipmentStatus';
 import { SoldierLocationMap } from '../components/soldier/LocationMap';
 import { useSoldierStore } from '../store/soldierStore';
-import { Soldier } from '../types/soldier';
+import type { Soldier } from '../types/soldier';
 
 const mockSoldiers: Soldier[] = [
   {
@@ -110,7 +111,7 @@ const mockSoldiers: Soldier[] = [
       { id: '15', name: 'Body Armor', type: 'gear', status: 'ready', location: 'Torso', lastChecked: new Date() },
       { id: '16', name: 'GPS Device', type: 'communication', status: 'ready', location: 'Backpack', lastChecked: new Date() },
     ],
-    location: { latitude: 2.5074, longitude: -51.1278, altitude: 12 },
+    location: { latitude: 11.5074, longitude: -0.1278, altitude: 12 },
     missionTime: 180,
     fatigueLevel: 28,
     hydrationLevel: 88,
@@ -119,8 +120,10 @@ const mockSoldiers: Soldier[] = [
 ];
 
 export const SoldierHealthDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [soldiers, setSoldiers] = useState<Soldier[]>(mockSoldiers);
-  const { selectedSoldier, selectSoldier, updateMetrics } = useSoldierStore();
+  const [selectedSoldier, setSelectedSoldier] = useState<Soldier>(mockSoldiers[0]);
+  const { updateMetrics } = useSoldierStore();
 
   useEffect(() => {
     // Simulate real-time vital signs updates
@@ -130,10 +133,10 @@ export const SoldierHealthDashboard: React.FC = () => {
           ...soldier,
           vitalSigns: {
             ...soldier.vitalSigns,
-            heartRate: soldier.vitalSigns.heartRate + Math.floor((Math.random() - 0.5) * 10),
-            bodyTemperature: soldier.vitalSigns.bodyTemperature + (Math.random() - 0.5) * 0.3,
+            heartRate: Math.max(50, Math.min(150, soldier.vitalSigns.heartRate + Math.floor((Math.random() - 0.5) * 10))),
+            bodyTemperature: Math.max(36, Math.min(40, soldier.vitalSigns.bodyTemperature + (Math.random() - 0.5) * 0.3)),
             bloodOxygen: Math.min(100, Math.max(90, soldier.vitalSigns.bloodOxygen + (Math.random() - 0.5) * 2)),
-            respirationRate: soldier.vitalSigns.respirationRate + Math.floor((Math.random() - 0.5) * 4),
+            respirationRate: Math.max(10, Math.min(35, soldier.vitalSigns.respirationRate + Math.floor((Math.random() - 0.5) * 4))),
             timestamp: new Date(),
           },
           fatigueLevel: Math.min(100, soldier.fatigueLevel + Math.random() * 2),
@@ -201,27 +204,29 @@ export const SoldierHealthDashboard: React.FC = () => {
                       key={soldier.id}
                       soldier={soldier}
                       index={idx}
-                      onSelect={selectSoldier}
+                      isSelected={selectedSoldier?.id === soldier.id}
+                      onSelect={setSelectedSoldier}
                     />
                   ))}
                 </div>
               </motion.div>
 
               {/* Vital Signs */}
-                  <div className="lg:col-span-2">
-                  <VitalSignsCard 
+                <div className="mb-8 lg:col-span-2">
+                  <VitalSignsCard
                     vitalSigns={displaySoldier.vitalSigns}
                     soldierName={displaySoldier.name}
+                    status={displaySoldier.status === 'inactive' ? 'healthy' : (displaySoldier.status as any)}
+                    onShowDetails={() => navigate(`/soldier/${displaySoldier.id}`)}
                   />
-                  </div>
-                  
+                </div>
+
             </div>
 
             {/* Selected Soldier Details */}
             {displaySoldier && (
               <>
                 
-
                 {/* Equipment & Mission Details */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <EquipmentStatus
@@ -259,7 +264,6 @@ export const SoldierHealthDashboard: React.FC = () => {
                             overflow: 'hidden',
                           }}
                         >
-
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${(displaySoldier.missionTime / 480) * 100}%` }}
@@ -377,25 +381,23 @@ export const SoldierHealthDashboard: React.FC = () => {
                         </p>
                       </motion.div>
                     </div>
+                    
                   </motion.div>
-                  
                 </div>
-                {/* Location Map */}
-                <div className="mb-8">
-                  <motion.div
+              </>
+            )}
+            {/* Location Map */}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="lg:col-span-2"
+                
               >
                 <h2 className="text-xl font-bold mb-4 mt-4" style={{ color: THEME.colors.accent }}>
                   Field Positions
                 </h2>
                 <SoldierLocationMap soldiers={soldiers} />
               </motion.div>
-                </div>
-              </>
-            )}
           </motion.div>
         </main>
       </div>

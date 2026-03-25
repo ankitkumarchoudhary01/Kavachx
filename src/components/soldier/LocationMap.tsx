@@ -44,7 +44,7 @@ export const SoldierLocationMap: React.FC<SoldierLocationMapProps> = ({ soldiers
             <path d="M 50 0 L 0 0 0 50" fill="none" stroke={THEME.colors.border} strokeWidth="0.5" />
           </pattern>
         </defs>
-        <rect width="1500" height="600" fill="url(#fieldGrid)" />
+        <rect width="2500" height="1500" fill="url(#fieldGrid)" />
 
         {/* Plot soldiers as markers */}
         {soldiers.map((soldier) => {
@@ -63,7 +63,7 @@ export const SoldierLocationMap: React.FC<SoldierLocationMapProps> = ({ soldiers
               <motion.circle
                 cx={x}
                 cy={y}
-                r="20"
+                r='20'
                 fill="none"
                 stroke={color}
                 strokeWidth={isHovered ? 3 : 2}

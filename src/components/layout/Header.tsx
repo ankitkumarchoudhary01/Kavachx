@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AlertCircle, Settings, Bell, LogOut } from 'lucide-react';
 import { THEME } from '../../config/theme';
@@ -8,24 +9,26 @@ export const Header: React.FC = () => {
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border-b p-4"
+      className=" border-b p-4"
       style={{
         backgroundColor: THEME.colors.surface,
         borderColor: THEME.colors.border,
       }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            <AlertCircle size={32} color={THEME.colors.accent} />
-          </motion.div>
-          <h1 className="text-2xl font-bold" style={{ color: THEME.colors.accent }}>
-            KAVACH X - Soldier Health Monitoring System
-          </h1>
-        </div>
+        <Link to="/">
+          <div className="flex items-center gap-3 cursor-pointer hover:opacity-80">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <AlertCircle size={32} color={THEME.colors.accent} />
+            </motion.div>
+            <h1 className="text-2xl font-bold" style={{ color: THEME.colors.accent }}>
+              KAVACH-X Soldier Health Monitroing System
+            </h1>
+          </div>
+        </Link>
 
         <div className="flex items-center gap-4">
           <motion.button
@@ -42,9 +45,13 @@ export const Header: React.FC = () => {
               style={{ backgroundColor: THEME.colors.critical }}
             />
           </motion.button>
-          <motion.button whileHover={{ scale: 1.1 }} className="p-2 rounded hover:opacity-80">
-            <Settings size={24} style={{ color: THEME.colors.text }} />
-          </motion.button>
+          
+          <Link to="/settings">
+            <motion.button whileHover={{ scale: 1.1 }} className="p-2 rounded hover:opacity-80">
+              <Settings size={24} style={{ color: THEME.colors.text }} />
+            </motion.button>
+          </Link>
+          
           <motion.button whileHover={{ scale: 1.1 }} className="p-2 rounded hover:opacity-80">
             <LogOut size={24} style={{ color: THEME.colors.text }} />
           </motion.button>

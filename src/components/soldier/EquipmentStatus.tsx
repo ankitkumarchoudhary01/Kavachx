@@ -21,7 +21,7 @@ const getEquipmentStatusColor = (status: string) => {
 const getEquipmentIcon = (status: string) => {
   switch (status) {
     case 'ready':
-      return <CheckCircle size={18} />;
+      return <CheckCircle size={18}  />;
     case 'damaged':
       return <AlertCircle size={18} />;
     case 'missing':

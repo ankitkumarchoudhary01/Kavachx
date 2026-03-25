@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Droplet, Wind, Thermometer } from 'lucide-react';
+import { Heart, Droplet, Wind, Thermometer, ChevronRight } from 'lucide-react';
 import { VitalSigns } from '../../types/soldier';
-import { THEME } from '@config/theme';
+import { THEME } from '../../config/theme';
 
 interface VitalSignsCardProps {
   vitalSigns: VitalSigns;
   soldierName: string;
+  status?: 'healthy' | 'warning' | 'critical';
+  onShowDetails?: () => void;
 }
 
 const getHealthStatus = (heartRate: number, temp: number, o2: number) => {
@@ -24,186 +26,187 @@ const getStatusColor = (status: string) => {
   return colorMap[status] || THEME.colors.accent;
 };
 
+const StatTile = ({
+  title,
+  value,
+  subtext,
+  icon,
+  accent,
+}: {
+  title: string;
+  value: React.ReactNode;
+  subtext: string;
+  icon: React.ReactNode;
+  accent: string;
+}) => {
+  return (
+    <motion.div
+      whileHover={{ x: 4, scale: 1.01 }}
+      className="p-4 rounded border"
+      style={{
+        backgroundColor: THEME.colors.surfaceLight,
+        borderColor: THEME.colors.border,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <span style={{ color: accent }}>{icon}</span>
+        <span style={{ color: THEME.colors.textSecondary, fontSize: '0.9rem' }}>{title}</span>
+      </div>
+      <div className="text-3xl font-bold" style={{ color: THEME.colors.text }}>
+        {value}
+      </div>
+      <div className="mt-1 text-sm" style={{ color: THEME.colors.textSecondary }}>
+        {subtext}
+      </div>
+    </motion.div>
+  );
+};
+
 export const VitalSignsCard: React.FC<VitalSignsCardProps> = ({
   vitalSigns,
   soldierName,
+  status,
+  onShowDetails,
 }) => {
-  const healthStatus = getHealthStatus(
-    vitalSigns.heartRate,
-    vitalSigns.bodyTemperature,
-    vitalSigns.bloodOxygen
-  );
+  const derivedStatus =
+    status ??
+    getHealthStatus(vitalSigns.heartRate, vitalSigns.bodyTemperature, vitalSigns.bloodOxygen);
+
+  const statusColor = getStatusColor(derivedStatus);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       className="p-6 rounded-lg border"
       style={{
         backgroundColor: THEME.colors.surface,
         borderColor: THEME.colors.border,
-        boxShadow: `0 0 15px ${getStatusColor(healthStatus)}30`,
+        boxShadow: `0 0 16px ${statusColor}22`,
       }}
     >
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-bold" style={{ color: THEME.colors.accent }}>
+        <h3 className="text-xl font-bold" style={{ color: THEME.colors.accent }}>
           {soldierName} - Vital Signs
         </h3>
-        <motion.span
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="px-3 py-1 rounded-full text-sm font-bold"
+
+        <span
+          className="px-4 py-2 rounded-full text-sm font-bold"
           style={{
-            backgroundColor: getStatusColor(healthStatus) + '30',
-            color: getStatusColor(healthStatus),
+            backgroundColor: `${statusColor}22`,
+            color: statusColor,
           }}
         >
-          {healthStatus.toUpperCase()}
-        </motion.span>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        {/* Heart Rate */}
-        <motion.div
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          className="p-4 rounded border"
-          style={{
-            backgroundColor: THEME.colors.surfaceLight,
-            borderColor: THEME.colors.border,
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.8, repeat: Infinity }}
-            >
-              <Heart size={20} color={THEME.colors.critical} />
-            </motion.div>
-            <span style={{ color: THEME.colors.textSecondary, fontSize: '0.85rem' }}>
-              Heart Rate
-            </span>
-          </div>
-          <p className="text-2xl font-bold" style={{ color: THEME.colors.text }}>
-            {vitalSigns.heartRate}
-            <span style={{ fontSize: '0.75rem', color: THEME.colors.textSecondary }}>
-              {' '}
-              bpm
-            </span>
-          </p>
-          <p style={{ color: THEME.colors.textSecondary, fontSize: '0.75rem' }}>
-            {vitalSigns.heartRate < 60 ? 'Low' : vitalSigns.heartRate > 100 ? 'High' : 'Normal'}
-          </p>
-        </motion.div>
-
-        {/* Body Temperature */}
-        <motion.div
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.05 }}
-          className="p-4 rounded border"
-          style={{
-            backgroundColor: THEME.colors.surfaceLight,
-            borderColor: THEME.colors.border,
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Thermometer size={20} color={THEME.colors.high} />
-            <span style={{ color: THEME.colors.textSecondary, fontSize: '0.85rem' }}>
-              Temperature
-            </span>
-          </div>
-          <p className="text-2xl font-bold" style={{ color: THEME.colors.text }}>
-            {vitalSigns.bodyTemperature.toFixed(1)}
-            <span style={{ fontSize: '0.75rem', color: THEME.colors.textSecondary }}>
-              °C
-            </span>
-          </p>
-          <p style={{ color: THEME.colors.textSecondary, fontSize: '0.75rem' }}>
-            {vitalSigns.bodyTemperature > 38 ? 'Elevated' : 'Normal'}
-          </p>
-        </motion.div>
-
-        {/* Blood Oxygen */}
-        <motion.div
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.1 }}
-          className="p-4 rounded border"
-          style={{
-            backgroundColor: THEME.colors.surfaceLight,
-            borderColor: THEME.colors.border,
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Droplet size={20} color={THEME.colors.accent} />
-            <span style={{ color: THEME.colors.textSecondary, fontSize: '0.85rem' }}>
-              Blood Oxygen
-            </span>
-          </div>
-          <p className="text-2xl font-bold" style={{ color: THEME.colors.text }}>
-            {vitalSigns.bloodOxygen}
-            <span style={{ fontSize: '0.75rem', color: THEME.colors.textSecondary }}>
-              %
-            </span>
-          </p>
-          <p style={{ color: THEME.colors.textSecondary, fontSize: '0.75rem' }}>
-            {vitalSigns.bloodOxygen < 95 ? 'Low' : 'Normal'}
-          </p>
-        </motion.div>
-
-        {/* Respiration Rate */}
-        <motion.div
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.15 }}
-          className="p-4 rounded border"
-          style={{
-            backgroundColor: THEME.colors.surfaceLight,
-            borderColor: THEME.colors.border,
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Wind size={20} color={THEME.colors.medium} />
-            <span style={{ color: THEME.colors.textSecondary, fontSize: '0.85rem' }}>
-              Respiration
-            </span>
-          </div>
-          <p className="text-2xl font-bold" style={{ color: THEME.colors.text }}>
-            {vitalSigns.respirationRate}
-            <span style={{ fontSize: '0.75rem', color: THEME.colors.textSecondary }}>
-              {' '}
-              rpm
-            </span>
-          </p>
-          <p style={{ color: THEME.colors.textSecondary, fontSize: '0.75rem' }}>
-            {vitalSigns.respirationRate > 25 ? 'High' : 'Normal'}
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Blood Pressure */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="p-4 rounded border"
-        style={{
-          backgroundColor: THEME.colors.surfaceLight,
-          borderColor: THEME.colors.border,
-        }}
-      >
-        <span style={{ color: THEME.colors.textSecondary, fontSize: '0.85rem' }}>
-          Blood Pressure
+          {derivedStatus.toUpperCase()}
         </span>
-        <p className="text-2xl font-bold mt-2" style={{ color: THEME.colors.text }}>
-          {vitalSigns.bloodPressure.systolic}/{vitalSigns.bloodPressure.diastolic}
-          <span style={{ fontSize: '0.75rem', color: THEME.colors.textSecondary }}>
-            {' '}
-            mmHg
-          </span>
-        </p>
-      </motion.div>
+      </div>
+
+      {/* 2x2 grid of vital stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <StatTile
+          title="Heart Rate"
+          value={
+            <>
+              {Math.round(vitalSigns.heartRate)} <span className="text-base">bpm</span>
+            </>
+          }
+          subtext={vitalSigns.heartRate > 100 ? 'High' : vitalSigns.heartRate < 60 ? 'Low' : 'Normal'}
+          icon={<Heart size={20} />}
+          accent={THEME.colors.critical}
+        />
+
+        <StatTile
+          title="Temperature"
+          value={
+            <>
+              {vitalSigns.bodyTemperature.toFixed(1)}
+              <span className="text-base">°C</span>
+            </>
+          }
+          subtext={vitalSigns.bodyTemperature > 38 ? 'Elevated' : 'Normal'}
+          icon={<Thermometer size={20} />}
+          accent={THEME.colors.high}
+        />
+
+        <StatTile
+          title="Blood Oxygen"
+          value={
+            <>
+              {vitalSigns.bloodOxygen.toFixed(1)}
+              <span className="text-base">%</span>
+            </>
+          }
+          subtext={vitalSigns.bloodOxygen < 95 ? 'Low' : 'Normal'}
+          icon={<Droplet size={20} />}
+          accent={THEME.colors.accent}
+        />
+
+        <StatTile
+          title="Respiration"
+          value={
+            <>
+              {Math.round(vitalSigns.respirationRate)} <span className="text-base">rpm</span>
+            </>
+          }
+          subtext={vitalSigns.respirationRate > 25 ? 'High' : 'Normal'}
+          icon={<Wind size={20} />}
+          accent={THEME.colors.medium}
+        />
+      </div>
+
+      {/* Bottom row: Blood Pressure (left) + Show Details (right) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Blood Pressure */}
+        <motion.div
+          whileHover={{ x: 4, scale: 1.01 }}
+          className="p-4 rounded border"
+          style={{
+            backgroundColor: THEME.colors.surfaceLight,
+            borderColor: THEME.colors.border,
+          }}
+        >
+          <div style={{ color: THEME.colors.textSecondary, fontSize: '0.9rem' }}>Blood Pressure</div>
+          <div className="text-3xl font-bold mt-2" style={{ color: THEME.colors.text }}>
+            {vitalSigns.bloodPressure.systolic}/{vitalSigns.bloodPressure.diastolic}
+            <span className="text-base" style={{ color: THEME.colors.textSecondary }}>
+              {' '}
+              mmHg
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Show Details Button */}
+        {onShowDetails && (
+          <motion.button
+            type="button"
+            whileHover={{ x: 4, scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onShowDetails}
+            className="p-4 rounded border text-left flex items-center justify-between"
+            style={{
+              backgroundColor: THEME.colors.surfaceLight,
+              borderColor: THEME.colors.border,
+              color: THEME.colors.text,
+              cursor: 'pointer',
+              border: `1px solid ${THEME.colors.border}`,
+            }}
+          >
+            <div>
+              <div className="text-sm font-semibold" style={{ color: THEME.colors.accent }}>
+                Show Details
+              </div>
+              <div className="text-xs mt-1" style={{ color: THEME.colors.textSecondary }}>
+                View trends, history & full profile
+              </div>
+            </div>
+
+            <span style={{ color: THEME.colors.accent, display: 'flex', alignItems: 'center' }}>
+              <ChevronRight size={22} />
+            </span>
+          </motion.button>
+        )}
+      </div>
     </motion.div>
   );
 };

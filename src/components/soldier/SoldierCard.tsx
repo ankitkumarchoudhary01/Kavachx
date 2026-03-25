@@ -2,11 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, AlertTriangle, Battery, Backpack } from 'lucide-react';
 import { Soldier } from '../../types/soldier';
-import { THEME } from '@config/theme';
+import { THEME } from '../../config/theme';
 
 interface SoldierCardProps {
   soldier: Soldier;
   index: number;
+  isSelected?: boolean;
   onSelect: (soldier: Soldier) => void;
 }
 
@@ -20,7 +21,12 @@ const getStatusColor = (status: string) => {
   return colorMap[status] || THEME.colors.accent;
 };
 
-export const SoldierCard: React.FC<SoldierCardProps> = ({ soldier, index, onSelect }) => {
+export const SoldierCard: React.FC<SoldierCardProps> = ({
+  soldier,
+  index,
+  isSelected = false,
+  onSelect,
+}) => {
   const equipmentReady = soldier.equipment.filter((e) => e.status === 'ready').length;
 
   return (
@@ -28,14 +34,14 @@ export const SoldierCard: React.FC<SoldierCardProps> = ({ soldier, index, onSele
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
-      whileHover={{ x: 4, scale: 1.01 }}
+      whileHover={{ scale: 1.02 }}
       onClick={() => onSelect(soldier)}
       className="p-4 rounded-lg border mb-3 cursor-pointer"
       style={{
-        backgroundColor: THEME.colors.surface,
-        borderColor: getStatusColor(soldier.status),
-        borderLeftWidth: '4px',
-        boxShadow: `0 0 15px ${getStatusColor(soldier.status)}30`,
+        backgroundColor: isSelected ? THEME.colors.surfaceLight : THEME.colors.surface,
+        borderColor: isSelected ? getStatusColor(soldier.status) : THEME.colors.border,
+        borderLeftWidth: isSelected ? '4px' : '1px',
+        boxShadow: isSelected ? `0 0 15px ${getStatusColor(soldier.status)}30` : 'none',
       }}
     >
       <div className="flex items-start justify-between mb-3">
@@ -63,11 +69,11 @@ export const SoldierCard: React.FC<SoldierCardProps> = ({ soldier, index, onSele
       <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
         <div className="flex items-center gap-1" style={{ color: THEME.colors.textSecondary }}>
           <AlertTriangle size={14} />
-          HR: {soldier.vitalSigns.heartRate} bpm
+          HR: {Math.round(soldier.vitalSigns.heartRate)} bpm
         </div>
         <div className="flex items-center gap-1" style={{ color: THEME.colors.textSecondary }}>
           <Battery size={14} />
-          Hydration: {soldier.hydrationLevel}%
+          Hydration: {soldier.hydrationLevel.toFixed(0)}%
         </div>
         <div className="flex items-center gap-1" style={{ color: THEME.colors.textSecondary }}>
           <MapPin size={14} />
@@ -97,7 +103,8 @@ export const SoldierCard: React.FC<SoldierCardProps> = ({ soldier, index, onSele
               transition={{ duration: 0.5 }}
               style={{
                 height: '100%',
-                backgroundColor: soldier.fatigueLevel > 70 ? THEME.colors.critical : THEME.colors.high,
+                backgroundColor:
+                  soldier.fatigueLevel > 70 ? THEME.colors.critical : THEME.colors.high,
               }}
             />
           </div>
@@ -118,7 +125,8 @@ export const SoldierCard: React.FC<SoldierCardProps> = ({ soldier, index, onSele
               transition={{ duration: 0.5 }}
               style={{
                 height: '100%',
-                backgroundColor: soldier.hydrationLevel < 40 ? THEME.colors.critical : THEME.colors.safe,
+                backgroundColor:
+                  soldier.hydrationLevel < 40 ? THEME.colors.critical : THEME.colors.safe,
               }}
             />
           </div>
