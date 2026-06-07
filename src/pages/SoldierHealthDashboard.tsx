@@ -132,7 +132,7 @@ const mockSoldiers: Soldier[] = [
       timestamp: new Date(),
     },
     equipment: [
-      { id: '17', name: 'Assault Rifle', type: 'weapon', status: 'ready', location: 'Holster', lastChecked: new Date() },
+      { id: '17', name: 'Assault Rifle', type: 'weapon', status: 'ready', location: 'Primary Sling', lastChecked: new Date() },
       { id: '18', name: 'Ammunition', type: 'ammo', status: 'ready', location: 'Vest', lastChecked: new Date() },
       { id: '19', name: 'Body Armor', type: 'gear', status: 'ready', location: 'Torso', lastChecked: new Date() },
       { id: '20', name: 'Medical Kit', type: 'medical', status: 'ready', location: 'Backpack', lastChecked: new Date() },
@@ -158,7 +158,7 @@ const mockSoldiers: Soldier[] = [
       timestamp: new Date(),
     },
     equipment: [
-      { id: '21', name: 'Carbine', type: 'weapon', status: 'ready', location: 'Holster', lastChecked: new Date() },
+      { id: '21', name: 'Carbine', type: 'weapon', status: 'ready', location: 'Primary Sling', lastChecked: new Date() },
       { id: '22', name: 'Ammunition', type: 'ammo', status: 'ready', location: 'Vest', lastChecked: new Date() },
       { id: '23', name: 'Body Armor', type: 'gear', status: 'damaged', location: 'Torso', lastChecked: new Date() },
       { id: '24', name: 'Radio', type: 'communication', status: 'ready', location: 'Backpack', lastChecked: new Date() },
@@ -184,7 +184,7 @@ const mockSoldiers: Soldier[] = [
       timestamp: new Date(),
     },
     equipment: [
-      { id: '25', name: 'Assault Rifle', type: 'weapon', status: 'damaged', location: 'Holster', lastChecked: new Date() },
+      { id: '25', name: 'Assault Rifle', type: 'weapon', status: 'damaged', location: 'Primary Sling', lastChecked: new Date() },
       { id: '26', name: 'Ammunition', type: 'ammo', status: 'ready', location: 'Vest', lastChecked: new Date() },
       { id: '27', name: 'Body Armor', type: 'gear', status: 'missing', location: 'Unknown', lastChecked: new Date() },
       { id: '28', name: 'Medical Kit', type: 'medical', status: 'ready', location: 'Backpack', lastChecked: new Date() },
@@ -210,7 +210,7 @@ const mockSoldiers: Soldier[] = [
       timestamp: new Date(),
     },
     equipment: [
-      { id: '29', name: 'Rifle', type: 'weapon', status: 'ready', location: 'Holster', lastChecked: new Date() },
+      { id: '29', name: 'Rifle', type: 'weapon', status: 'ready', location: 'Primary Sling', lastChecked: new Date() },
       { id: '30', name: 'Ammunition', type: 'ammo', status: 'ready', location: 'Vest', lastChecked: new Date() },
       { id: '31', name: 'Body Armor', type: 'gear', status: 'ready', location: 'Torso', lastChecked: new Date() },
       { id: '32', name: 'GPS Device', type: 'communication', status: 'ready', location: 'Backpack', lastChecked: new Date() },
@@ -236,7 +236,7 @@ const mockSoldiers: Soldier[] = [
       timestamp: new Date(),
     },
     equipment: [
-      { id: '33', name: 'Carbine', type: 'weapon', status: 'ready', location: 'Holster', lastChecked: new Date() },
+      { id: '33', name: 'Carbine', type: 'weapon', status: 'ready', location: 'Primary Sling', lastChecked: new Date() },
       { id: '34', name: 'Ammunition', type: 'ammo', status: 'damaged', location: 'Vest', lastChecked: new Date() },
       { id: '35', name: 'Body Armor', type: 'gear', status: 'ready', location: 'Torso', lastChecked: new Date() },
       { id: '36', name: 'Radio', type: 'communication', status: 'ready', location: 'Backpack', lastChecked: new Date() },
@@ -262,7 +262,7 @@ const mockSoldiers: Soldier[] = [
       timestamp: new Date(),
     },
     equipment: [
-      { id: '37', name: 'Assault Rifle', type: 'weapon', status: 'ready', location: 'Holster', lastChecked: new Date() },
+      { id: '37', name: 'Assault Rifle', type: 'weapon', status: 'ready', location: 'Primary Sling', lastChecked: new Date() },
       { id: '38', name: 'Ammunition', type: 'ammo', status: 'missing', location: 'Unknown', lastChecked: new Date() },
       { id: '39', name: 'Body Armor', type: 'gear', status: 'damaged', location: 'Torso', lastChecked: new Date() },
       { id: '40', name: 'Medical Kit', type: 'medical', status: 'ready', location: 'Backpack', lastChecked: new Date() },
